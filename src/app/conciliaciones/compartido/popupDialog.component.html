@@ -1,0 +1,21 @@
+<div  [hidden]="ocultarConfirmar">
+  <h6 *ngIf="bMensajeDefault">¿Está seguro que desea continuar?</h6>
+  <h6 *ngIf="!bMensajeDefault">{{ mensajeMostrarConfirmar }}</h6>
+  <hr>
+  <br>
+  <mat-card-actions class="btnConfirm">
+      <button mat-raised-button color="purple"  (click)="onOk()" > Aceptar </button>
+    <button mat-raised-button color="red"  (click)="onCancel()" > Cancelar </button>
+    </mat-card-actions>
+  </div>
+
+  <div  [hidden]="ocultarLoad">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div  [hidden]="ocultarMensaje">
+    <h6>{{ mensajeMostrar }}</h6>
+    <hr>
+    <br>
+    <button mat-button color="purple"  (click)="onAceptar()" > Aceptar </button>
+  </div>

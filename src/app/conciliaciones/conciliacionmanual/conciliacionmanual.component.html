@@ -1,0 +1,460 @@
+﻿<mat-card class="mb-2">
+  <mat-card-title>Conciliación Manual</mat-card-title>
+  <mat-card-subtitle>Por favor ingrese el tipo de producto y las fechas correspondientes:</mat-card-subtitle>
+  <hr>
+  <mat-card-content>
+
+    <mat-form-field>
+      <mat-select placeholder="Banco" [(value)]="idBancoSeleccionado" [(ngModel)]="idBancoSeleccionado"
+        (ngModelChange)="onConsultarCuentas()">
+        <mat-option *ngFor="let p of listabancos" [value]="p.idEntidad">
+          {{p.descEntidad}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Cuenta" [(ngModel)]="idCuentaSeleccionado">
+        <mat-option *ngFor="let p of listacuenta" [value]="p.idCuenta">
+          {{p.numeroCuenta}} - {{p.codigoMoneda}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Producto" [(ngModel)]="idProductoSeleccionado" [(value)]="idProductoSeleccionado">
+        <mat-option *ngFor="let p of listaproductos" [value]="p.idProducto">
+          {{p.descProducto}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Canal" [(ngModel)]="idCanalSeleccionado" [(value)]="idCanalSeleccionado">
+        <mat-option *ngFor="let c of listacanal" [value]="c.idCanal">
+          {{c.descripcionCanal}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="inputDate">
+      <input matInput placeholder="Fecha Inicio" [matDatepicker]="pickerStart" [(ngModel)]="fechaDesdeSeleccionado"
+        [required]="isRequired">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="inputDate">
+      <input matInput placeholder="Fecha Fin" [matDatepicker]="pickerEnd" [(ngModel)]="fechaHastaSeleccionado"
+        [required]="isRequired">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="inputText">
+      <input (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)" matInput placeholder="N°Planilla"
+        [(ngModel)]="idPlanillaFiltro" class="inputPlanilla">
+    </mat-form-field>
+
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button color="{{ColorButton}}" (click)="onFiltrar()"
+      [disabled]="enabledButtonConsultar()">CONSULTAR</button>
+  </mat-card-actions>
+
+  <div class="row">
+    <div class="column">
+      <mat-card> Planillas de Ventas
+        <div class="example-container">
+          <mat-table #table [dataSource]="dataSourcePlanilla">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selectionPlanilla.hasValue() && isAllSelected()"
+                  [indeterminate]="selectionPlanilla.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                  (change)="$event ? selectionPlanilla.toggle(element) : null"
+                  [checked]="selectionPlanilla.isSelected(element)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <!--Inicio Control de Cambio 1.1-->
+            <ng-container matColumnDef="codigoCanal">
+              <mat-header-cell *matHeaderCellDef> Codigo Canal </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.codigoCanal}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionCanal">
+              <mat-header-cell *matHeaderCellDef> Canal </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.descripcionCanal}} </mat-cell>
+            </ng-container>
+            <!--Fin Control de Cambio 1.1-->
+
+            <!-- IdPlanilla Column -->
+            <ng-container matColumnDef="idPlanilla">
+              <mat-header-cell *matHeaderCellDef> Planilla </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.idPlanilla}} </mat-cell>
+            </ng-container>
+
+            <!-- dtFechaPlanilla Column -->
+            <ng-container matColumnDef="dtFechaPlanilla">
+              <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.dtFechaPlanilla}} </mat-cell>
+            </ng-container>
+
+            <!-- dcTotal Column -->
+            <ng-container matColumnDef="dcTotal">
+              <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.dcTotal}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsPlanilla"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsPlanilla;" (click)="selectionPlanilla.toggle(row)">
+            </mat-row>
+
+          </mat-table>
+          <mat-paginator #paginatorPlanilla [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="column">
+      <mat-card> Depósitos Pendientes
+        <div class="example-container">
+
+          <mat-table #table [dataSource]="dataSourceDeposito">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggleDeposito() : null"
+                  [checked]="selectionDeposito.hasValue() && isAllSelectedDeposito()"
+                  [indeterminate]="selectionDeposito.hasValue() && !isAllSelectedDeposito()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                  (change)="$event ? selectionDeposito.toggle(element) : null; checkDeposito($event.checked,element.idDeposito, element.numeroOperacion, element.extorno)"
+                  [checked]="selectionDeposito.isSelected(element)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <!-- IdPlanilla Column -->
+            <ng-container matColumnDef="idDeposito">
+              <mat-header-cell *matHeaderCellDef> Deposito </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.idDeposito}} </mat-cell>
+            </ng-container>
+
+            <!-- dtFechaPlanilla Column -->
+            <ng-container matColumnDef="fechaDeposito">
+              <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.fechaDeposito}} </mat-cell>
+            </ng-container>
+
+            <!-- dcTotal Column -->
+            <ng-container matColumnDef="monto">
+              <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.monto}} </mat-cell>
+            </ng-container>
+
+            <!-- dcTotal Column -->
+            <ng-container matColumnDef="numeroOperacion">
+              <mat-header-cell *matHeaderCellDef> Nro Operacion </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.numeroOperacion}} </mat-cell>
+            </ng-container>
+            <!-- dcTotal Column -->
+            <ng-container matColumnDef="extorno">
+              <mat-header-cell *matHeaderCellDef> Extorno </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <img *ngIf="element.extorno" src="assets/images/extorno.svg" alt="Extorno" height="16px"
+                  width="16px">
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsDeposito"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsDeposito;" (click)="selectionDeposito.toggle(row)">
+            </mat-row>
+          </mat-table>
+
+          <mat-paginator #paginatorDeposito [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="flagExtornos">
+    <div class="column"></div>
+    <div class="column">
+      <mat-card> Depósitos asociados por Extornos.
+        <div class="example-container">
+          <mat-table #table [dataSource]="dataSourceDepositoExtornos">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggleDepositoExtornos() : null"
+                  [checked]="selectionDepositoExtornos.hasValue() && isAllSelectedDeposito()"
+                  [indeterminate]="selectionDepositoExtornos.hasValue() && !isAllSelectedDeposito()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                  (change)="$event ? selectionDepositoExtornos.toggle(element) : null"
+                  [checked]="selectionDepositoExtornos.isSelected(element)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <!-- IdPlanilla Column -->
+            <ng-container matColumnDef="IdDeposito">
+              <mat-header-cell *matHeaderCellDef> Deposito </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.idDeposito}} </mat-cell>
+            </ng-container>
+
+            <!-- dtFechaPlanilla Column -->
+            <ng-container matColumnDef="FechaDeposito">
+              <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.fechaDeposito}} </mat-cell>
+            </ng-container>
+
+            <!-- dcTotal Column -->
+            <ng-container matColumnDef="Monto">
+              <mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.monto}} </mat-cell>
+            </ng-container>
+
+            <!-- dcTotal Column -->
+            <ng-container matColumnDef="NumeroOperacion">
+              <mat-header-cell *matHeaderCellDef> Nro Operacion </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.numeroOperacion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Saldo">
+              <mat-header-cell *matHeaderCellDef> Saldo </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.saldo}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IdDepositoAsociado">
+              <mat-header-cell *matHeaderCellDef> Depósito Asociado </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.idDepositoAsociado}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsDepositoExtornos"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsDepositoExtornos;"
+              (click)="selectionDepositoExtornos.toggle(row)"></mat-row>
+          </mat-table>
+
+        </div>
+      </mat-card>
+    </div>
+
+  </div>
+
+
+
+  <mat-card-actions>
+    <button mat-button color="{{ColorButton}}" (click)="onLiquidar()"
+      [disabled]="enabledButtonLiquidar()">PROCESAR</button>
+  </mat-card-actions>
+
+
+</mat-card>
+
+<!--inicio-->
+<!--fin-->
+<!-- <div class="panel panel-default" style="margin-top:4px;">
+      <div class="panel-heading" style="width:100%;height:46px">Conciliacion Bancaria</div>
+      <div class="panel-body">
+          <fieldset>
+              <legend>Criterios</legend>
+
+              <div class="form-group">
+                  <div class="row">
+                      <div class="col-xs-10 col-sm-3 col-lg-3">
+                          <label for="productoproceso">Banco:</label>
+                          <select id="productoproceso" class="form-control" [(ngModel)]="seleccion_idbanco" (change)="onConsultarCuentas();">
+                              <option value="0" selected="selected">Seleccione</option>
+                              <option [ngValue]="p.idEntidad" *ngFor="let p of listabancos">{{p.descEntidad}}</option>
+                          </select>
+                      </div>
+                      <div class="col-xs-10 col-sm-3 col-lg-3">
+                          <label for="productoproceso">Nro Cuenta:</label>
+                          <select id="productoproceso" class="form-control" [(ngModel)]="seleccion_idcuenta">
+                              <option value="0" selected="selected">Seleccione</option>
+                              <option [ngValue]="p.idCuenta" *ngFor="let p of listacuenta">{{p.numeroCuenta}}</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <div class="row">
+                      <div class="col-xs-10 col-sm-3 col-lg-3">
+                          <label for="productoproceso">Producto:</label>
+                          <select id="productoproceso" class="form-control" [(ngModel)]="seleccion_idproducto">
+                              <option value="0" selected="selected">Seleccione</option>
+                              <option [ngValue]="p.idProducto" *ngFor="let p of listaproductos">{{p.descProducto}}</option>
+                          </select>
+                      </div>
+                      <div class="col-xs-10 col-sm-3 col-lg-3">
+                          <label for="productoproceso">Moneda:</label>
+                          <select id="productoproceso" class="form-control" [(ngModel)]="seleccion_idmoneda">
+                              <option value="0" selected="selected">Seleccione</option>
+                              <option [ngValue]="p.idMoneda" *ngFor="let p of listamoneda">{{p.codigo}}</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <div class="row">
+                      <div class="col-xs-10 col-sm-3 col-lg-3">
+                          <label for="fechainicio">Fecha Inicio:</label>
+                          <input id="fechainicio" type="date" class="form-control" />
+                      </div>
+                      <div class="col-xs-10 col-sm-3 col-lg-3">
+                          <label for="fechafin">Fecha Fin:</label>
+                          <input id="fechafin" type="date" class="form-control" />
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <div class="row">
+                      <div class="col-md-1">
+                          <button class="btn btn-primary"  (click)="onFiltrar()">Buscar</button>
+                      </div>
+                  </div>
+              </div>
+          </fieldset>
+
+
+          <fieldset>
+              <legend>Resultados</legend>
+
+              <div class="row">
+                  <div class="col-xs-10 col-sm-6 col-lg-6">
+
+                      <fieldset>
+                          <legend>Planillas</legend>
+                          <table class='table' *ngIf="listaplanillas">
+                              <thead>
+                                  <tr>
+                                      <th>Sel</th>
+                                      <th>Nro. Operacion</th>
+                                      <th>Cod. Planilla</th>
+                                      <th>Monto</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let planilla of listaplanillas">
+                                      <td><input type="checkbox"  [(ngModel)]="planilla.selected"  /></td>
+                                      <td>{{ planilla.idPlanilla }}</td>
+                                      <td>{{ planilla.idCanal }}</td>
+                                      <td>{{ planilla.dcTotal }}</td>
+
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </fieldset>
+
+                  </div>
+
+                  <div class="col-xs-10 col-sm-6 col-lg-6">
+
+                      <fieldset>
+                          <legend>Depositos</legend>
+                          <table class='table' *ngIf="listadepositos">
+                              <thead>
+                                  <tr>
+                                      <th>Sel</th>
+                                      <th>Nro. Operacion</th>
+                                      <th>Cod. Abono</th>
+                                      <th>Monto</th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let deposito of listadepositos">
+                                      <td><input type="checkbox" [(ngModel)]="deposito.selected"  /></td>
+                                      <td>{{ deposito.idDeposito }}</td>
+                                      <td>{{ deposito.numeroOperacion }}</td>
+                                      <td>{{ deposito.monto }}</td>
+
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </fieldset>
+
+
+                  </div>
+
+              </div>
+
+              <div class="form-group">
+                  <div class="row">
+                      <div class="col-md-1">
+                          <button class="btn btn-primary" (click)="onLiquidar()">Liquidar</button>
+                      </div>
+                  </div>
+              </div>
+          </fieldset>
+      </div>
+  </div> -->
+
+
+<!--
+  <table>
+      <tr>
+        <td  class="column_table">
+            <table class="mat-table mat-elevation-z8">
+                <thead>
+                    <tr class="mat-header-row ng-star-inserted"  >
+
+                        <th class="mat-header-cell" role="columnheader"> Nro. Operacion </th>
+                        <th class="mat-header-cell"  role="columnheader"> Cod. Planilla </th>
+                        <th class="mat-header-cell" role="columnheader"> Monto </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="mat-row ng-star-inserted" *ngFor="let planilla of listaplanillas">
+
+                        <td class="mat-cell"> {{ planilla.idPlanilla }} </td>
+                        <td class="mat-cell"> {{ planilla.dtFechaPlanilla }} </td>
+                        <td class="mat-cell"> {{ planilla.dcTotal }} </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td  class="column_table">
+            <table class="mat-table mat-elevation-z8">
+                <thead>
+                    <tr class="mat-header-row ng-star-inserted"  >
+
+                        <th class="mat-header-cell" role="columnheader"> Nro. Operacion </th>
+                        <th class="mat-header-cell"  role="columnheader"> Cod. Abono </th>
+                        <th class="mat-header-cell" role="columnheader"> Monto </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="mat-row ng-star-inserted" *ngFor="let deposito of listadepositos">
+
+                        <td class="mat-cell"> {{ deposito.idDeposito }} </td>
+                        <td class="mat-cell"> {{ deposito.numeroOperacion }} </td>
+                        <td class="mat-cell"> {{ deposito.monto }} </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+      </tr>
+    </table> -->

@@ -1,0 +1,31 @@
+<mat-card>
+    <mat-card-title>Generación de Archivos</mat-card-title>
+    <hr>
+    <mat-card-content>
+        <mat-form-field>
+            <mat-select placeholder="Tipo" [(ngModel)]="tipoarchivoSeleccionado" name="archivo" [required]="isRequired">
+                <mat-option [value]="0">-Seleccione-</mat-option>
+                <mat-option *ngFor="let TipoArchivo of ListaTipoArchivo" [value]="TipoArchivo.idTipoarchivo">{{TipoArchivo.vcDescripcion}}</mat-option>
+            </mat-select>
+       </mat-form-field>
+        <div class="mb-1">
+              <mat-form-field>
+                      <input matInput placeholder="Fecha Inicio" [matDatepicker]="pickerStart" [(ngModel)] = "fechaDesdeSeleccionado" ><!--[required]="isRequired"-->
+                      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerStart></mat-datepicker>
+              </mat-form-field>
+        </div>
+        <div class="mb-1">
+              <mat-form-field>
+                      <input matInput placeholder="Fecha Fin" [matDatepicker]="pickerEnd" [(ngModel)] = "fechaHastaSeleccionado" ><!--[required]="isRequired"-->
+                      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerEnd></mat-datepicker>
+              </mat-form-field>
+        </div>
+        <div class="pb-1">
+            <mat-card-actions>
+                <button mat-raised-button color="purple" (click)="openDialog()">Enviar a Exactus</button>
+            </mat-card-actions>
+        </div>
+    </mat-card-content>
+  </mat-card>

@@ -1,0 +1,41 @@
+<mat-card class="mb-2">
+  <mat-card-title>Mantenimiento de usuarios</mat-card-title>
+  <mat-card-subtitle>Criterios</mat-card-subtitle>
+  <hr>
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="start center" class="mb-2">
+      <mat-form-field dividerColor="primary" class="ml-xs mr-xs" style="width: 100%;">
+        <input matInput placeholder="Nombre" value="example">
+      </mat-form-field>
+        <mat-form-field dividerColor="primary" class="ml-xs mr-xs" style="width: 100%;">
+          <input matInput placeholder="Tipo de Perfil" value="example">
+        </mat-form-field>
+
+        </div>
+  </mat-card-content>
+  <hr>
+  <mat-card-actions>
+    <button mat-button color="accent">Buscar</button>
+    <button mat-button>Exportar</button>
+    <button mat-button>Nuevo Usuario</button>
+    <button mat-button>Limpiar</button>
+  </mat-card-actions>
+</mat-card>
+
+<ngx-datatable
+  class="material"
+  [rows]="rows"
+  [columns]="[{name: 'Id'},{name:'Codigo de Usuario'},{name:'Nombres'},{name:'Apellido Paterno'},
+              {name: 'Apellido Materno'},{name: 'Correo'},{name: 'Acciones'}]"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="'auto'"
+  [externalPaging]="true"
+  [count]="count"
+  [offset]="offset"
+  [limit]="limit"
+  (page)='onPage($event)'>
+</ngx-datatable>
+
+<!--<mat-table></mat-table>-->

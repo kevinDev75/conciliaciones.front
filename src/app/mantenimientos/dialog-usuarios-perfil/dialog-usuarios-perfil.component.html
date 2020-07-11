@@ -1,0 +1,56 @@
+
+<h2 mat-dialog-title>Agregar nuevo usuario</h2>
+<mat-dialog-content>
+
+<div class="mat-elevation-z6">
+
+    <mat-spinner [style.display]="loading ? 'block' : 'none'"></mat-spinner>
+<mat-table [style.display]="loading === false ? 'block' : 'none'" #table [dataSource]="dataSource" matSort>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        <ng-container matColumnDef="codUsuario">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Codigo </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.codUsuario}} </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="correoUsuario">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Correo </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.correoUsuario}} </mat-cell>
+          </ng-container>
+      
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.nombre}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="apellidoPaterno">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Apellido paterno </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.apellidoPaterno}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <button mat-button color="primary" (click)="onDelete(element.codUsuario)"><mat-icon>delete</mat-icon></button>
+                 </mat-cell>
+              </ng-container>
+</mat-table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+</mat-dialog-content>
+
+  <mat-dialog-actions>
+
+      <button class="mat-raised-button mat-primary"
+          (click)="openDialogUsuario()">
+      Nuevo Usuario
+      </button>
+      <button class="mat-raised-button"
+              (click)="close()">
+          Atrás
+      </button>
+  
+  </mat-dialog-actions>

@@ -1,0 +1,73 @@
+<mat-card class="mb-2">
+    <mat-card-title>Reporte de Documentos de Abonos</mat-card-title>
+    <hr>
+    <mat-card-content>
+
+      <mat-form-field class="matfieldDate">
+        <input matInput placeholder="Fecha Inicio" class="inputDate" [matDatepicker]="pickerStart" [(ngModel)]="fechaDesdeSeleccionado" [required]="isRequired">
+        <mat-datepicker-toggle matSuffix [for]="pickerStart" ></mat-datepicker-toggle>
+        <mat-datepicker #pickerStart  ></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="matfieldDate">
+        <input matInput placeholder="Fecha Fin" class="inputDate" [matDatepicker]="pickerEnd" [(ngModel)]="fechaHastaSeleccionado" [required]="isRequired">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="matInput">
+          <input matInput placeholder="Factura" class="matInput" [(ngModel)]="numerofacturaSeleccionado" [required]="isRequired">
+      </mat-form-field>
+
+    </mat-card-content>
+    <hr>
+    <mat-card-actions>
+      <button mat-button color="purple"  (click)="onFiltrar()" [disabled]="enabledButtonProceso()">CONSULTAR</button>
+      <button mat-button color="purple" mat-button (click)="openDialogNuevaFactura()">NUEVO</button>
+    </mat-card-actions>
+
+    <div class="row">
+      <div class="column">
+        <div class="example-container">
+            <table mat-table [dataSource]="dataSourceDocumentoAbono">
+                <ng-container matColumnDef="numeroFactura">
+                  <th mat-header-cell *matHeaderCellDef> Factura </th>
+                  <td mat-cell *matCellDef="let element"> {{element.numeroFactura}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaFactura">
+                  <th mat-header-cell *matHeaderCellDef> Fecha Factura </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fechaFactura}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="montoFactura">
+                  <th mat-header-cell *matHeaderCellDef> Monto </th>
+                  <td mat-cell *matCellDef="let element"> {{element.montoFactura}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="idNotaCredito">
+                  <th mat-header-cell *matHeaderCellDef> Nota Credito </th>
+                  <td mat-cell *matCellDef="let element"> {{element.idNotaCredito}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaNotaCredito">
+                  <th mat-header-cell *matHeaderCellDef> Fecha Nota Credito </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fechaNotaCredito}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef> Estado </th>
+                  <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsDocumentoAbono"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsDocumentoAbono;"></tr>
+
+             </table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+
+    </div>
+
+  </mat-card>

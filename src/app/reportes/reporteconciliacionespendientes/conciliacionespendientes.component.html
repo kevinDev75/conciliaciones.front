@@ -1,0 +1,21 @@
+﻿<mat-card class="mb-2">
+  <mat-card-title>Planillas/Depositos Pendientes</mat-card-title>
+  <mat-card-subtitle>Por favor ingrese y/o seleccione los filtros necesarios</mat-card-subtitle>
+  <hr>
+  <mat-card-content>
+
+    <mat-form-field class="matfielSelect">
+      <mat-select placeholder="Producto" [(ngModel)]="idProductoSeleccionado" [required]="isRequired">
+        <mat-option *ngFor="let p of listaproductos" [value]="p.idProducto">
+          {{p.descProducto}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </mat-card-content>
+  <hr>
+  <mat-card-actions>
+    <button mat-button color="{{ColorButton}}" (click)="onExportar()"
+      [disabled]="enabledButtonProceso()">EXPORTAR</button>
+  </mat-card-actions>
+</mat-card>

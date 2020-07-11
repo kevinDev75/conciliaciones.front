@@ -1,0 +1,44 @@
+<div class="relative">
+  <div class="form-bg">
+    <div fxLayout="row" fxLayoutAlign="center start" class="pt-2">
+      <div fxLayout="column" fxFlex.xl="40" fxFlex.lg="40" fxFlex.md="50" fxFlex.sm="80" fxFlex.xs="90">
+        <mat-card class="login-session">
+
+          <div>
+            <a class="base-border">
+              <img src="assets/images/logo_protecta_security.svg">
+            </a>
+            <h2 class="base-border">Bienvenido, Inicia sesión</h2>
+            <p>Ingrese su usuario y contraseña</p>
+            <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm">
+              <div fxLayout="column" fxLayoutAlign="start stretch">
+                <mat-form-field style="width: 100%">
+                  <input matInput placeholder="Usuario" type="text" name="username" [(ngModel)]="model.username"
+                    #username="ngModel" required>
+                </mat-form-field>
+                <mat-form-field style="width: 100%" class="mb-1">
+                  <input matInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password"
+                    #password="ngModel" required>
+                </mat-form-field>
+                <div fxLayout="row" fxLayoutWrap="wrap">
+                  <div fxFlex.gt-sm="100%" fxFlex="100" class="m-gap p-gap">
+                    <button mat-button color="purple" type="submit">ENTRAR</button> &nbsp; &nbsp;
+                    <button mat-button color="red" type="button" (click)="limpiarRegistros()">LIMPIAR</button>
+                  </div>
+                  <!-- <div fxFlex.gt-sm="20%" fxFlex.gt-xs="50" fxFlex="100" class="m-gap p-gap">
+                                        <button mat-button color="red" type="button" (click)="limpiarRegistros()" >LIMPIAR</button>
+                                </div>
+                                <div fxFlex.gt-sm="60%" fxFlex.gt-xs="50" fxFlex="100" class="m-gap p-gap">
+                                </div> -->
+                </div>
+
+                <!--
+                              <p class="mat-text-warn mb-0">Olvidaste la contraseña?</p>-->
+              </div>
+            </form>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

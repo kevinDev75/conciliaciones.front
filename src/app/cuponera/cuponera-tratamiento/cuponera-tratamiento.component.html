@@ -1,0 +1,393 @@
+<mat-card class="mb-2">
+  <mat-card-title>Tratamiento Cuponera</mat-card-title>
+  <hr />
+  <mat-card-content>
+    <form #myForm="ngForm" name="ngForm">
+      <div class="mb-1">
+        <mat-card-actions
+          align="end"
+          style="width: 100%;"
+          class="mat-card-trama"
+        >
+          <button
+            mat-raised-button
+            color="primary"
+            name="btnBuscar"
+            (click)="btningresar(myForm)"
+          >
+            Ingresar
+          </button>
+          <button
+            type="button"
+            mat-raised-button
+            (click)="btnProcesar(myForm)"
+            name="btnExportar"
+            color="primary"
+          >
+            Procesar
+          </button>
+          <button
+            type="button"
+            mat-raised-button
+            (click)="btnGrabar(myForm)"
+            name="btnExportar"
+            color="primary"
+          >
+            Grabar
+          </button>
+          <button
+            type="button"
+            mat-raised-button
+            (click)="ClearForm()"
+            name="btnExportar"
+            color="primary"
+          >
+            limpiar
+          </button>
+        </mat-card-actions>
+      </div>
+      <mat-form-field style="width: 30%;">
+        <mat-select
+          placeholder="Transación Cuponera"
+          [(ngModel)]="idTransacion"
+          (selectionChange) = "ClearForm()" 
+          name="idTransacion"
+        >
+        <mat-option *ngFor="let option of listTipoTransacion" [value]="option.idTransacion">{{ option.descripcion }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+        <input matInput [(ngModel)]="this.numRecibo"  type="" (keypress)="documentNumberKeyPress($event)"  
+        class="inputPlanilla" placeholder="N° Recibo" name="this.numRecibo" [required]="false">                
+    </mat-form-field>   
+     
+
+
+
+      <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+        <input
+          matInput
+          placeholder="N° Cuponera"
+          [(ngModel)]="this.nroCuponera"
+          name= "this.nroCuponera"
+          class="inputPlanilla"
+        />
+      </mat-form-field>
+
+      <div class="mb-1">
+        <mat-form-field style="width: 20%;">
+          <input
+            matInput
+            placeholder="Fecha"
+            [max]="maxDate"
+            [matDatepicker]="pickerStart"
+            [(ngModel)]="fechaInicio"
+            name="fechaInicio"
+            disabled
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="pickerStart"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="inputText SpaceLeft" style="width: 50%;">
+          <input
+            matInput
+            placeholder="Nombre cliente"
+            [(ngModel)]="this.cabRecibo.clientName"
+            class="inputPlanilla"
+            name = "this.cabRecibo.clientName"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <div
+        class="mb-1"
+        style="
+          border-bottom: 1.5px solid #163764;
+          color: #163764;
+          font-weight: 800;
+        "
+      >
+        <label style="margin-right: 1rem;">Datos de Verificación</label>
+      </div>
+
+      <div class="mb-1">
+        <mat-form-field class="inputText" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="Ramo"
+            [(ngModel)]="this.cabRecibo.ramo"
+            name = "this.cabRecibo.ramo"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+
+        <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="Producto"
+            [(ngModel)]="this.cabRecibo.producto"
+            name ="this.cabRecibo.producto"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+        <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="N° Poliza"
+            [(ngModel)]="this.cabRecibo.nroPoliza"
+            name = "this.cabRecibo.nroPoliza"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="mb-1">
+        <mat-form-field class="inputText" style="width: 20%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="N° Certificado"
+            [(ngModel)]="this.cabRecibo.nroCertificado"
+            name = "this.cabRecibo.nroCertificado"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+        <mat-label class="SpaceLeft" style="font-weight: 800;"
+          >Vigencia del recibo Desde :</mat-label
+        >
+        <mat-form-field class="inputText SpaceLeft" style="width: 20%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder=""
+            [(ngModel)]="this.cabRecibo.inicioVigencia"
+            name = "this.cabRecibo.inicioVigencia"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+        <mat-label class="SpaceLeft" style="font-weight: 800;"
+          >Hasta :</mat-label
+        >
+        <mat-form-field class="inputText SpaceLeft" style="width: 20%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder=""
+            [(ngModel)]="this.cabRecibo.finVigencia"
+            name = "this.cabRecibo.finVigencia"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <div
+        class="mb-1"
+        style="
+          border-bottom: 1.5px solid #163764;
+          color: #163764;
+          font-weight: 800;
+        "
+      >
+        <label style="margin-right: 1rem;">Tratamiento de Cuponera</label>
+      </div>
+
+      <div class="mb-1">
+        <mat-form-field class="inputText" style="width: 30%;">
+          <input
+            
+            matInput
+            placeholder="Cant° Cupones"
+            [(ngModel)]="nroCupones"
+            name = "nroCupones"
+            class="inputPlanilla"
+            
+          />
+        </mat-form-field>
+        <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="Monto Inicial"
+            [(ngModel)]="montoInicial"
+            name = "montoInicial"
+            class="inputPlanilla"
+            
+          />
+        </mat-form-field>
+        <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="Monto Prima"
+            [(ngModel)]="this.cabRecibo.montoPrima"
+            name = "this.cabRecibo.montoPrima"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="mb-1">
+        <mat-form-field class="inputText" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="Monto Cupon"
+            [(ngModel)]="this.cabRecibo.montoPrima"
+            name = "this.cabRecibo.montoPrima"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+        <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="% de Interes"
+            [(ngModel)]="this.cabRecibo.porcentajeInteres"
+            name = "this.cabRecibo.porcentajeInteres"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+        <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
+          <input
+            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+            matInput
+            placeholder="Fecha de Pago"
+            [(ngModel)]="this.cabRecibo.fechaPago"
+            name = "this.cabRecibo.fechaPago"
+            class="inputPlanilla"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceCuponera" class="tabla-trama">
+          <!-- IdPlanilla Column -->
+          <!-- <ng-container matColumnDef="CuentaProtecta">
+          <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Nro de Cuenta</th>
+          <td mat-cell *matCellDef="let element"  class="cell-align-center"> {{element.numeroCuenta}} </td>
+        </ng-container>-->
+
+          <!-- totalPlanilla Column -->
+          <ng-container matColumnDef="Cupon">
+            <th mat-header-cell *matHeaderCellDef class="cell-align-center">
+              Cupon
+            </th>
+            <td mat-cell *matCellDef="let element" class="cell-align-center">
+              {{ element.nroCupon }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="N° de Cupon">
+            <th mat-header-cell *matHeaderCellDef class="cell-align-center">
+              N° de Cupon
+            </th>
+            <td mat-cell *matCellDef="let element" class="cell-align-center">
+              {{ element.mroRecibo }}
+            </td>
+          </ng-container>
+
+          <!-- fechaPlanilla Column -->
+          <ng-container matColumnDef="Fecha inicio vigencia">
+            <th mat-header-cell *matHeaderCellDef class="cell-align-center">
+              Fecha inicio vigencia
+            </th>
+            <td mat-cell *matCellDef="let element" class="cell-align-center">
+              {{ element.fechaDesde}}
+            </td>
+          </ng-container>
+
+          <!-- totalPlanilla Column -->
+          <ng-container matColumnDef="Fecha fin vigencia">
+            <th mat-header-cell *matHeaderCellDef class="cell-align-center">
+              Fecha fin vigencia
+            </th>
+            <td mat-cell *matCellDef="let element" class="cell-align-center">
+              {{ element.fechaHasta }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Fecha de Pago">
+            <th mat-header-cell *matHeaderCellDef class="cell-align-center">
+              Fecha de Pago
+            </th>
+            <td mat-cell *matCellDef="let element" class="cell-align-center">
+              {{ element.fechaPago }}
+            </td>
+          </ng-container>
+
+          <!-- totalPlanilla Column -->
+          <ng-container matColumnDef="Monto de Cupón">
+            <th mat-header-cell *matHeaderCellDef class="cell-align-right">
+              Monto de Cupón
+            </th>
+            <td mat-cell *matCellDef="let element" class="cell-align-right">
+              {{ element.montoCupon }}
+            </td>
+          </ng-container>
+
+          <!-- totalPlanilla Column -->
+          <ng-container matColumnDef="Estado">
+            <th mat-header-cell *matHeaderCellDef class="cell-align-center">
+              Estado
+            </th>
+            <td mat-cell *matCellDef="let element" class="cell-align-center">
+              {{ element.estado }}
+            </td>
+          </ng-container>
+
+          <!--<ng-container matColumnDef="Mora">
+          <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Mora</th>
+          <td mat-cell *matCellDef="let element"  class="cell-align-right"> {{element.importeMora}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Monto Mínimo" class=".cell-width">
+          <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Monto Mínimo</th>
+          <td mat-cell *matCellDef="let element" class="cell-align-right"> {{element.importeMontoMinimo}} </td>
+        </ng-container>-->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsCupon"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsCupon"></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[20, 50, 100]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <hr />
+  <mat-card-content align="end">
+    <div class="mb-1">
+      <mat-form-field class="inputText" style="width: 30%;">
+        <input
+          (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
+          matInput
+          placeholder="Total Financiado"
+          [(ngModel)]="idPlanillaFiltro"
+          class="inputPlanilla"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+</mat-card>

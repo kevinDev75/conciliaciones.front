@@ -1,0 +1,210 @@
+<div class="mat-elevation-z8">
+  <mat-spinner [style.display]="loading ? 'block' : 'none'"></mat-spinner>
+  <mat-table [style.display]="loading === false ? 'block' : 'none'" #table [dataSource]="dataSourcePerfil" matSort>
+
+    <mat-header-row *matHeaderRowDef="displayedColumnsPerfil"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumnsPerfil;"></mat-row>
+    
+          <ng-container matColumnDef="idPerfil">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.idPerfil}} </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="tipoPerfil">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.tipoPerfil}} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="nombrePerfil">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.vcNombrePerfil}} </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="descripcion">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.vcDescripcion}} </mat-cell>
+              </ng-container>
+    
+                  <ng-container matColumnDef="fechaCreacion">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Creacion </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.dtFechacreacion}} </mat-cell>
+                    </ng-container>
+        
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <button mat-button color="primary" (click)="addUser(element.idPerfil)"><mat-icon>person_add</mat-icon></button>
+                <button mat-button color="primary" (click)="showForEdit(element.idPerfil, element.vcNombrePerfil, element.vcDescripcion)"><mat-icon>edit</mat-icon></button>
+                <button mat-button color="primary" (click)="onDelete(element.idPerfil)"><mat-icon>delete</mat-icon></button>
+               </mat-cell>
+            </ng-container>
+
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+ 
+ 
+       <!-- 
+ <div class="mat-elevation-z6">
+    <mat-spinner [style.display]="loading ? 'block' : 'none'"></mat-spinner>
+    <mat-table [style.display]="loading === false ? 'block' : 'none'" #table [dataSource]="dataSourcePerfil" matSort>
+
+        Generic column definition 
+      <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef">
+        <mat-header-cell *cdkHeaderCellDef>{{ column.header }}</mat-header-cell>
+        <mat-cell *cdkCellDef="let row">{{ column.cell(row) }}</mat-cell>
+      </ng-container>
+
+<mat-header-row *matHeaderRowDef="displayedColumnsPerfil"></mat-header-row>
+<mat-row *matRowDef="let row; columns: displayedColumnsPerfil;"></mat-row>
+
+      <ng-container matColumnDef="idPerfil">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.Id}} </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="tipoPerfil">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.Tipo}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="nombrePerfil">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.Nombre}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.Descripcion}} </mat-cell>
+          </ng-container>
+
+              <ng-container matColumnDef="fechaCreacion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Creacion </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.FechaCreacion}} </mat-cell>
+                </ng-container>
+    
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-button color="primary" (click)="addUser(element.IdPerfil)"><mat-icon>person_add</mat-icon></button>
+            <button mat-button color="primary" (click)="showForEdit(element)"><mat-icon>edit</mat-icon></button>
+            <button mat-button color="primary" (click)="onDelete(element.IdPerfil)"><mat-icon>delete</mat-icon></button>
+           </mat-cell>
+        </ng-container>
+
+    </mat-table>
+    <mat-paginator  #paginator [style.display]="loading === false ? 'block' : 'none'" [pageSize]="5" ></mat-paginator>
+  </div>
+-->
+<!--   
+<div  class="mat-elevation-z8">
+  <mat-spinner [style.display]="loading ? 'block' : 'none'"></mat-spinner>
+  <mat-table [style.display]="loading === false ? 'block' : 'none'" #table [dataSource]="dataSource">
+          
+          <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef">
+            <mat-header-cell *cdkHeaderCellDef>{{ column.header }}</mat-header-cell>
+            <mat-cell *cdkCellDef="let row">{{ column.cell(row) }}</mat-cell>
+          </ng-container>
+          <ng-container  matColumnDef="operations">
+            <mat-header-cell *matHeaderCellDef  mat-sort-header> Acciones </mat-header-cell>
+            <mat-cell *matCellDef="let perfil">  <button  mat-button  color="primary" (click)="onDelete(element.id)"><mat-icon>delete</mat-icon>
+            </button>  <button  mat-button  color="primary" (click)="onEdit(perfil)"><mat-icon>edit</mat-icon></button>  </mat-cell>
+          </ng-container>
+       
+    <ng-container  matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> IdPerfil </mat-header-cell>
+      <mat-cell *matCellDef="let perfil"> {{perfil.IdPerfil}} </mat-cell>
+      </ng-container>
+      <ng-container  matColumnDef="tipoPerfil">
+        <mat-header-cell *matHeaderCellDef> TipoPerfil </mat-header-cell>
+        <mat-cell *matCellDef="let perfil"> {{perfil.TipoPerfil}} </mat-cell>
+        </ng-container>
+        <ng-container  matColumnDef="nombrePerfil">
+          <mat-header-cell *matHeaderCellDef> VcNombrePerfil </mat-header-cell>
+          <mat-cell *matCellDef="let perfil"> {{perfil.VcNombrePerfil}} </mat-cell>
+          </ng-container>
+          <ng-container  matColumnDef="descripcion">
+            <mat-header-cell *matHeaderCellDef> VcDescripcion </mat-header-cell>
+            <mat-cell *matCellDef="let perfil"> {{perfil.VcDescripcion}} </mat-cell>
+            </ng-container>
+            <ng-container  matColumnDef="estado">
+              <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+              <mat-cell *matCellDef="let perfil"> {{perfil.Estado}} </mat-cell>
+              </ng-container>
+              <ng-container  matColumnDef="fecha">
+                <mat-header-cell *matHeaderCellDef> DtFechacreacion </mat-header-cell>
+                <mat-cell *matCellDef="let perfil"> {{perfil.DtFechacreacion}} </mat-cell>
+                </ng-container>   
+
+    
+  </mat-table>
+
+
+</div>
+-->
+<!--
+
+<div class="card">
+  <div class="card-body">
+    <h6 class="text-center">
+      Lista de perfiles
+    </h6>
+    
+        <table datatable [dtOptions]="dtOptions" class="row-border hover">
+          <thead>
+              <tr>
+                  <td>Id Perfil</td>
+                  <td>Tipo Perfil</td>
+                  <td>Nombre Perfil</td>
+                  <td>Descripcion</td>
+                  <td>Estado</td>
+                  <td>Fecha Creacion</td>
+                  <td>Accion</td>
+                </tr>
+            </thead>
+            <tbody>
+        <tr *ngFor="let perfil of ListaPerfil">
+          <td>{{perfil.IdPerfil}}</td>
+          <td>{{perfil.TipoPerfil}}</td>
+          <td>{{perfil.VcNombrePerfil}}</td>
+          <td>{{perfil.VcDescripcion}}</td>
+          <td>{{perfil.Estado}}</td>
+          <td>{{perfil.DtFechacreacion}}</td>
+          <td>
+            <a class="btn btn-secondary text-white" (click)="onEdit(perfil)">
+                <i class="far fa-edit"></i>
+            </a>
+            <a class="btn btn-danger text-white" (click)="onDelete(perfil.$key)">
+                <i class="fas fa-trash-alt"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Modal title</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>One fine body&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+<hr>
+
+<pre>{{closeResult}}</pre>
+
+-->

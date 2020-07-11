@@ -1,0 +1,88 @@
+
+<h2 mat-dialog-title>{{titulo}}</h2>
+
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field>
+
+        <input matInput
+                placeholder="Nombre del perfil"
+               formControlName="nombrePerfil">
+
+    </mat-form-field>
+
+    <mat-form-field>
+            <mat-select placeholder="Tipo de Perfil" [(ngModel)]="idTipoPerfilSeleccionado" [ngModelOptions]="{standalone: true}" style="width: 100%;" >
+                    <mat-option *ngFor="let p of listatipoperfil" [value]="p.idTipoPerfil">
+                        {{p.vcDescripcion}}
+                    </mat-option>
+                </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+
+        <input matInput placeholder="Descripción del perfil"
+        formControlName="descripcionPerfil">
+
+
+    </mat-form-field>
+    <mat-spinner [style.display]="loading ? 'block' : 'none'"></mat-spinner>
+<mat-table [style.display]="loading === false ? 'block' : 'none'" #table [dataSource]="dataSourceRecurso" matSort>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsRecurso"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsRecurso;"></mat-row>
+  
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selectionRecurso.hasValue() && isAllSelected()"
+                        [indeterminate]="selectionRecurso.hasValue() && !isAllSelected()">
+
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selectionRecurso.toggle(element) : null"
+                        [checked]="element.flag === 'S'? true : selectionRecurso.isSelected(element)">
+            </mat-checkbox>
+        </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="idRecurso">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.idRecurso}} </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="modulo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Módulo </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.modulo}} </mat-cell>
+          </ng-container>
+      
+          <ng-container matColumnDef="opcion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Opcion </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.opcion}} </mat-cell>
+          </ng-container>
+  
+          <ng-container matColumnDef="descripcion">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Descripcion </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.descripcion}} </mat-cell>
+            </ng-container>
+  
+</mat-table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+<button class="mat-raised-button mat-primary" type="submit">
+Grabar
+</button>
+<button class="mat-raised-button"mat-button [mat-dialog-close]="false">
+    Cancelar
+    </button>
+</form>
+
+<mat-dialog-actions>
+</mat-dialog-actions>
+
+

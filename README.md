@@ -1,2 +1,3 @@
-# conciliaciones.front
-Sistema de conciliaciones Protecta front
+# protecta.conciliaciones.frontend
+
+Plataforma de Conciliaciones

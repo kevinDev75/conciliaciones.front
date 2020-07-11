@@ -1,0 +1,44 @@
+<mat-card class="mb-2">
+  <mat-card-title>Mantenimiento de perfiles</mat-card-title>
+  <mat-card-subtitle>Criterios</mat-card-subtitle>
+  <hr>
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="start center" class="mb-2">
+
+      <mat-form-field dividerColor="primary" class="ml-xs mr-xs" style="width: 50%;">
+        <input matInput [(ngModel)]="nombrePerfil" placeholder="Nombre del perfil">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="Tipo de Perfil" [(ngModel)]="idTipoPerfilSeleccionado" style="width: 100%;">
+          <mat-option *ngFor="let p of listatipoperfil" [value]="p.idTipoPerfil">
+            {{p.vcDescripcion}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!--
+        <mat-form-field>
+          <mat-select placeholder="Seleccione un tipo" [(ngModel)]="idTipoPerfilSeleccionado">
+              <mat-option *ngFor="let p of listatipoperfiles" [value]="p.idTipoPerfil">
+                  {{p.descProducto}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+-->
+
+    </div>
+  </mat-card-content>
+  <hr>
+  <mat-card-actions>
+    <button id="buscarPerfiles" mat-button color="purple"
+      (click)="listaPerfiles.listarPerfilesGrilla(nombrePerfil, idTipoPerfilSeleccionado)">Buscar</button>
+    <button mat-button color="purple"
+      (click)="listaPerfiles.onExportar()">Exportar</button>
+    <button mat-button color="purple"
+      (click)="openDialogNuevoRegistro()">Nuevo Perfil</button>
+    <button (click)="limpiarRegistros()" mat-button color="purple">Limpiar</button>
+  </mat-card-actions>
+</mat-card>
+
+<app-lista-perfiles #listaPerfiles></app-lista-perfiles>
+<!--<mat-table></mat-table>-->

@@ -1,0 +1,147 @@
+<mat-card class="mb-2">
+  <mat-card-title>Cargar Lote</mat-card-title> 
+  <hr>
+
+      <mat-card-content>
+          <form #myForm="ngForm" name="ngForm">
+              <mat-form-field>
+                  <mat-select placeholder="Seleccione un producto"   name="idProducto" [(ngModel)]="idProducto"  [required]="true">
+                      <mat-option *ngFor="let option of listaproductos" [value]="option.idProducto">{{ option.descProducto }}</mat-option>
+                  </mat-select>
+               
+              </mat-form-field>
+             
+                      <mat-form-field>
+                      <mat-select placeholder="Seleccione un banco" (ngModelChange)="onChangeSelecBanco($event)"  name="idEntidadBancaria" [(ngModel)]="idEntidadBancaria" [required]="true">
+                          <mat-option *ngFor="let option of listabancos" [value]="option.idBanco">{{ option.descripcionBanco }}</mat-option>
+                      </mat-select>
+                      </mat-form-field>  
+
+                    <div class="rightclass" *ngIf="ConciliacionManual">
+                      <mat-form-field class="">
+                        <input matInput type="" placeholder="Codigo de Proforma" name="NroProforma" [(ngModel)]="NroProforma" [required]="false">                
+                    </mat-form-field>   
+                    <mat-form-field>
+                        <input matInput placeholder="Fecha Inicio" [max]="maxDate" [matDatepicker]="pickerStart"
+                        [required]="ConciliacionManual" [(ngModel)]="fechaInicio" name="fechaInicio">
+                        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerStart></mat-datepicker>
+                      </mat-form-field>
+                      <mat-form-field>
+                        <input matInput placeholder="Fecha Fin" [matDatepicker]="pickerEnd" [min]="minDate" 
+                          [(ngModel)]="fechaFin" name="fechaFin" [required]="ConciliacionManual" > 
+                        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerEnd></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+              <mat-card-actions >
+                  <button  *ngIf="!ConciliacionManual" type="button"  mat-raised-button (click)="fileInput.click()">Seleccionar Archivo</button>
+                  <input hidden (change)="onFileSelected($event.target.files)" name="file" #fileInput type="file" accept=".txt"  id="file">              
+                  <button mat-raised-button color="primary" (click)="onValidarLote(myForm)"  class="btn-validar" > Procesar </button>                       
+               </mat-card-actions>  
+               <div class="mat-table" *ngIf="!ConciliacionManual">          
+                <table mat-table [dataSource]="dataSourceExcel" class="tabla-excel">
+                  <ng-container class="ng-container" matColumnDef="Nombre">
+                    <th mat-header-cell *matHeaderCellDef> Nombre</th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                  </ng-container>
+                  <ng-container class="ng-container" matColumnDef="Accion">                       
+                    <th mat-header-cell *matHeaderCellDef> Accion</th>
+                    <mat-cell mat-cell *matCellDef="let element; let i = index">
+                        <button mat-button color="primary" (click)="onDelete(i)"><mat-icon>delete</mat-icon></button>  
+                          </mat-cell>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsExcel"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsExcel;"></tr>
+                </table>
+               </div>              
+      
+
+    
+            </form>
+
+            <mat-card-actions class="btn-exportar">
+                              <button type="button" *ngIf="ExistError"  mat-raised-button (click)="onExportarExcelError()" color="red" >Errores</button>
+                              <button type="button" mat-raised-button (click)="onExportarExcel()" color="primary" >Exportar</button>
+                              <input hidden (change)="onFileSelectedExcel($event.target.files[0])" #fileInputExcel type="file" accept=".xlsx" id="file">    
+                              <input hidden matInput  disabled [(ngModel)]='srcResultExcel'>            
+                </mat-card-actions>  
+                <mat-form-field>
+                    <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Buscar...">
+                  </mat-form-field>
+             
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSourceLote" class="tabla-lote">
+            <ng-container matColumnDef="select"  >
+               
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox [disabled]="row.factura ==true"     (click)="$event ? selectRow(row) : null"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </td>
+             
+            </ng-container>              
+       
+            <ng-container matColumnDef="CuentaProtecta"  class="make-gold"> 
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Nro° Operacion</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center"> {{element.numeroOperacion}} </td>
+            </ng-container>
+            <!--<ng-container matColumnDef="Contratante">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Contratante</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-justify"> {{element.nombreCliente}} </td>
+            </ng-container>-->
+            <ng-container matColumnDef="Documento">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Documento</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center"> {{element.documentoCliente}} </td>
+            </ng-container> 
+            <ng-container matColumnDef="Cod. Proforma">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Cod. Proforma </th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center"> {{element.numeroRecibo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Fecha Vencimiento">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Fecha Vencimiento</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center"> {{element.fechaVencimiento}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Fecha Operacion">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Fecha Operación</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center"> {{element.fechaOperacion}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Fecha Carga Archivo">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center"> Fecha Carga Archivo</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center"> {{element.fechaCargaArchivo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Importe">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-right"> Importe</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-right"> {{element.importe | number:'.2-5' }} </td>
+            </ng-container> 
+            <ng-container matColumnDef="Factura">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center">Factura</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center"><mat-icon aria-hidden="false" *ngIf= "element.factura == false" style="color : #CC280F" aria-label="error">error</mat-icon>   <mat-icon aria-hidden="false" *ngIf= "element.factura == true" style="color:#0FCC8A" aria-label="check_circle">check_circle</mat-icon></td>
+            </ng-container> 
+            <ng-container matColumnDef="Observacion">
+              <th mat-header-cell *matHeaderCellDef class="cell-align-center" [ngClass]="'customWidthClass'" >Observacion</th>
+              <td mat-cell *matCellDef="let element" class="cell-align-center" [ngClass]="'customWidthClass'" >{{element.Observacion}} </td>
+            </ng-container> 
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTrama"></tr>
+            <tr mat-row [ngClass]="{'make-gold': row.factura == true}"  *matRowDef="let row; columns: displayedColumnsTrama;"></tr>
+          </table>
+      
+          <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+      </mat-card-content>
+      
+      <hr>
+      <mat-card-actions>
+        <button mat-raised-button color="primary"  [disabled]="ExistError" (click)="ValPlanillaFactura()"> Ingresar Forma de Pago </button>
+        <button mat-raised-button color="primary" [disabled]="ExistError"  (click)="insertarFectura()"> Generar Comprobante </button>     
+      </mat-card-actions>       
+    
+</mat-card>

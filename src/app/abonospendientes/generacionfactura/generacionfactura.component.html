@@ -1,0 +1,30 @@
+
+<h2 mat-dialog-title>Generación de Factura de Abonos</h2>
+
+<form [formGroup]="facturaForm" (ngSubmit)="onSubmit()">
+    
+    <mat-form-field>
+        <mat-select placeholder="Producto" [(ngModel)]="productoSeleccionado" name="producto" [ngModelOptions]="{standalone: true}" [required]="isRequired" style="width: 100%;">
+            <mat-option [value]="0">-Seleccione-</mat-option>
+            <mat-option *ngFor="let Producto of ListaProducto" [value]="Producto.idProducto">{{Producto.descProducto}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="matInput">
+        <input [readonly]="!editable" matInput placeholder="Factura" class="matInput" formControlName="numerofacturaGenerado">    
+   </mat-form-field>
+   
+    <div class="pb-1">
+        <mat-dialog-actions>
+            <button class="mat-raised-button mat-primary" type="submit">Generar</button>    
+            <button class="mat-raised-button"mat-button [mat-dialog-close]="true">Salir</button>
+        </mat-dialog-actions>
+    </div> 
+
+    <div ng-message="required">
+        <br/>
+        {{ mensaje }}
+    </div>
+
+</form>
+
