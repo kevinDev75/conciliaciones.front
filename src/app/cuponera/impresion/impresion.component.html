@@ -8,10 +8,9 @@
     <div class="mb-1">
       <mat-form-field class="inputText" style="width: 20%;">
         <input
-          (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
           matInput
           placeholder="Cuponera"
-          [(ngModel)]="idPlanillaFiltro"
+          [(ngModel)]="this.cabPrint.nroCupon"
           class="inputPlanilla"
         />
       </mat-form-field>
@@ -19,28 +18,25 @@
     <div class="mb-1">
       <mat-form-field class="inputText" style="width: 20%;">
         <input
-          (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
           matInput
           placeholder="N° de cupon inicial"
-          [(ngModel)]="idPlanillaFiltro"
+          [(ngModel)]="this.cabPrint.cuponInicial"
           class="inputPlanilla"
         />
       </mat-form-field>
       <mat-form-field class="inputText SpaceLeft" style="width: 20%;">
         <input
-          (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
           matInput
           placeholder="N° de cupon Final"
-          [(ngModel)]="idPlanillaFiltro"
+          [(ngModel)]="this.cabPrint.cuponFinal"
           class="inputPlanilla"
         />
       </mat-form-field>
       <mat-form-field class="inputText SpaceLeft" style="width: 10%;">
         <input
-          (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
           matInput
           placeholder="N° Copias"
-          [(ngModel)]="idPlanillaFiltro"
+          [(ngModel)]="this.cabPrint.copias"
           class="inputPlanilla"
         />
       </mat-form-field>
@@ -63,12 +59,7 @@
     >
       Ingresar
     </button>
-    <button
-      mat-button
-      color="{{ ColorButton }}"
-      (click)="onExportar()"
-      [disabled]="enabledButtonProceso()"
-    >
+    <button mat-button color="{{ ColorButton }}" (click)="PrintDocument()">
       Imprimir
     </button>
 

@@ -15,10 +15,10 @@ import {
   MAT_DATE_LOCALE,
 } from "@angular/material/core";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
-
+import { ToastrService } from "ngx-toastr";
 import { FormControl } from "@angular/forms";
 import { DialogControl } from "../../conciliaciones/compartido/popupDialog.component";
-
+import { CuponeraService } from "app/_services/cuponera.service";
 import { ExcelService } from "../../_services/exportexcel.service";
 import { NgxSpinnerService } from "ngx-spinner";
 export const MY_FORMATS = {
@@ -56,7 +56,7 @@ export class ImpresionComponent implements OnInit {
   public idProductoSeleccionado = 0;
   public fechaDesdeSeleccionado = "";
   public fechaHastaSeleccionado = "";
-
+  public cabPrint: any = {};
   public tipoDialogoLoad = "Load";
   public isRequired = true;
   public isRequiredFi = true;
@@ -70,7 +70,10 @@ export class ImpresionComponent implements OnInit {
   result: string;
   public ColorButton: string;
 
-  constructor() {}
+  constructor(
+    private service: CuponeraService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {}
 
@@ -82,6 +85,25 @@ export class ImpresionComponent implements OnInit {
     }
     this.ColorButton = "purple";
     return this.idProductoSeleccionado === 1;
+  }
+
+  PrintDocument() {
+    const json: any = {};
+    json.cuponera = this.cabPrint.nroCupon;
+    json.cuponInicial = this.cabPrint.cuponInicial;
+    json.cuponFinal = this.cabPrint.cuponFinal;
+    json.copias = this.cabPrint.copias;
+    this.service.printCupon(json).subscribe(
+      (s) => {
+        console.log(s);
+      },
+      (e) => {
+        this.toastr.error(
+          "Hubieron problemas al eliminar el cupon",
+          "Gestion de Cuponera"
+        );
+      }
+    );
   }
 
   protected handleErrorPromise(error: any): Promise<void> {
