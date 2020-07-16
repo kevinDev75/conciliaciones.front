@@ -50,27 +50,36 @@
         <mat-select
           placeholder="Transación Cuponera"
           [(ngModel)]="idTransacion"
-          (selectionChange) = "ClearForm()" 
+          (selectionChange)="ClearForm()"
           name="idTransacion"
         >
-        <mat-option *ngFor="let option of listTipoTransacion" [value]="option.idTransacion">{{ option.descripcion }}</mat-option>
+          <mat-option
+            *ngFor="let option of listTipoTransacion"
+            [value]="option.idTransacion"
+            >{{ option.descripcion }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
-        <input matInput [(ngModel)]="this.numRecibo"  type="" (keypress)="documentNumberKeyPress($event)"  
-        class="inputPlanilla" placeholder="N° Recibo" name="this.numRecibo" [required]="false">                
-    </mat-form-field>   
-     
-
-
+        <input
+          matInput
+          [(ngModel)]="this.numRecibo"
+          type=""
+          (keypress)="documentNumberKeyPress($event)"
+          class="inputPlanilla"
+          placeholder="N° Recibo"
+          name="this.numRecibo"
+          [required]="false"
+        />
+      </mat-form-field>
 
       <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
         <input
           matInput
           placeholder="N° Cuponera"
           [(ngModel)]="this.nroCuponera"
-          name= "this.nroCuponera"
+          name="this.nroCuponera"
           class="inputPlanilla"
         />
       </mat-form-field>
@@ -98,7 +107,7 @@
             placeholder="Nombre cliente"
             [(ngModel)]="this.cabRecibo.clientName"
             class="inputPlanilla"
-            name = "this.cabRecibo.clientName"
+            name="this.cabRecibo.clientName"
             readonly
           />
         </mat-form-field>
@@ -118,11 +127,10 @@
       <div class="mb-1">
         <mat-form-field class="inputText" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="Ramo"
             [(ngModel)]="this.cabRecibo.ramo"
-            name = "this.cabRecibo.ramo"
+            name="this.cabRecibo.ramo"
             class="inputPlanilla"
             readonly
           />
@@ -130,22 +138,20 @@
 
         <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="Producto"
             [(ngModel)]="this.cabRecibo.producto"
-            name ="this.cabRecibo.producto"
+            name="this.cabRecibo.producto"
             class="inputPlanilla"
             readonly
           />
         </mat-form-field>
         <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="N° Poliza"
             [(ngModel)]="this.cabRecibo.nroPoliza"
-            name = "this.cabRecibo.nroPoliza"
+            name="this.cabRecibo.nroPoliza"
             class="inputPlanilla"
             readonly
           />
@@ -155,11 +161,10 @@
       <div class="mb-1">
         <mat-form-field class="inputText" style="width: 20%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="N° Certificado"
             [(ngModel)]="this.cabRecibo.nroCertificado"
-            name = "this.cabRecibo.nroCertificado"
+            name="this.cabRecibo.nroCertificado"
             class="inputPlanilla"
             readonly
           />
@@ -169,11 +174,10 @@
         >
         <mat-form-field class="inputText SpaceLeft" style="width: 20%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder=""
             [(ngModel)]="this.cabRecibo.inicioVigencia"
-            name = "this.cabRecibo.inicioVigencia"
+            name="this.cabRecibo.inicioVigencia"
             class="inputPlanilla"
             readonly
           />
@@ -183,11 +187,10 @@
         >
         <mat-form-field class="inputText SpaceLeft" style="width: 20%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder=""
             [(ngModel)]="this.cabRecibo.finVigencia"
-            name = "this.cabRecibo.finVigencia"
+            name="this.cabRecibo.finVigencia"
             class="inputPlanilla"
             readonly
           />
@@ -208,33 +211,28 @@
       <div class="mb-1">
         <mat-form-field class="inputText" style="width: 30%;">
           <input
-            
             matInput
             placeholder="Cant° Cupones"
             [(ngModel)]="nroCupones"
-            name = "nroCupones"
+            name="nroCupones"
             class="inputPlanilla"
-            
           />
         </mat-form-field>
         <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="Monto Inicial"
             [(ngModel)]="montoInicial"
-            name = "montoInicial"
+            name="montoInicial"
             class="inputPlanilla"
-            
           />
         </mat-form-field>
         <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="Monto Prima"
             [(ngModel)]="this.cabRecibo.montoPrima"
-            name = "this.cabRecibo.montoPrima"
+            name="this.cabRecibo.montoPrima"
             class="inputPlanilla"
             readonly
           />
@@ -244,33 +242,30 @@
       <div class="mb-1">
         <mat-form-field class="inputText" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="Monto Cupon"
             [(ngModel)]="this.cabRecibo.montoPrima"
-            name = "this.cabRecibo.montoPrima"
+            name="this.cabRecibo.montoPrima"
             class="inputPlanilla"
             readonly
           />
         </mat-form-field>
         <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="% de Interes"
             [(ngModel)]="this.cabRecibo.porcentajeInteres"
-            name = "this.cabRecibo.porcentajeInteres"
+            name="this.cabRecibo.porcentajeInteres"
             class="inputPlanilla"
             readonly
           />
         </mat-form-field>
         <mat-form-field class="inputText SpaceLeft" style="width: 30%;">
           <input
-            (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
             matInput
             placeholder="Fecha de Pago"
             [(ngModel)]="this.cabRecibo.fechaPago"
-            name = "this.cabRecibo.fechaPago"
+            name="this.cabRecibo.fechaPago"
             class="inputPlanilla"
             readonly
           />
@@ -310,7 +305,7 @@
               Fecha inicio vigencia
             </th>
             <td mat-cell *matCellDef="let element" class="cell-align-center">
-              {{ element.fechaDesde}}
+              {{ element.fechaDesde }}
             </td>
           </ng-container>
 
@@ -380,10 +375,8 @@
     <div class="mb-1">
       <mat-form-field class="inputText" style="width: 30%;">
         <input
-          (keypress)="this.utilityService._kpPolicy($event, idPlanillaFiltro)"
           matInput
           placeholder="Total Financiado"
-          [(ngModel)]="idPlanillaFiltro"
           class="inputPlanilla"
           readonly
         />

@@ -86,7 +86,22 @@ export class ImpresionComponent implements OnInit {
     this.ColorButton = "purple";
     return this.idProductoSeleccionado === 1;
   }
-
+  obtenerBlobFromBase64(b64Data: string, contentType: string) {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  }
+  onExportar() {}
   PrintDocument() {
     const json: any = {};
     json.cuponera = this.cabPrint.nroCupon;
@@ -96,6 +111,11 @@ export class ImpresionComponent implements OnInit {
     this.service.printCupon(json).subscribe(
       (s) => {
         console.log(s);
+        if (s.p_NCODE == 0) {
+          var file = this.obtenerBlobFromBase64(s.data, "application/pdf");
+          const urlfile = URL.createObjectURL(file);
+          window.open(urlfile, "_blank");
+        }
       },
       (e) => {
         this.toastr.error(

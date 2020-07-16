@@ -65,11 +65,19 @@ export class FinanciamientoCuponeraComponent implements OnInit {
   public idProducto: number;
   public idEntidadBancaria: number;
   public srcResult: any;
+  public numRecibo: string;
+  public key: string;
+  public nroCuponera: number;
+  public nroCupones: number;
+  public cantCupones: number;
+  public montoInicial: number;
+  public importeTotal: number = 0;
+  public cabRecibo: any = {};
   public listaplanilla: any[] = [];
   public fechaFin = new Date();
   public fileTrama: string;
   public ListaExcel: any[] = [];
-  public ListTipoTransacion : any[] = [];
+  public ListTipoTransacion: any[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   public fechaInicio = new Date();
   public fechaInicioDesde = new Date();
@@ -106,8 +114,11 @@ export class FinanciamientoCuponeraComponent implements OnInit {
 
   dataSourceTrama = new MatTableDataSource();
   ngOnInit() {
-
-    this.ListTipoTransacion = [{ name: "Creación de Cuponera" }, { name: "Recuperación de Cuponera" }, { name: "Modificación de Cuponera"} ]
+    this.ListTipoTransacion = [
+      { name: "Creación de Cuponera" },
+      { name: "Recuperación de Cuponera" },
+      { name: "Modificación de Cuponera" },
+    ];
     this.service.listarProducto().subscribe(
       (s) => {
         this.listaproductos = s;
