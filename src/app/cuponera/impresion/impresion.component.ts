@@ -73,9 +73,9 @@ export class ImpresionComponent implements OnInit {
   constructor(
     private service: CuponeraService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   enabledButtonProceso() {
     if (this.idProductoSeleccionado === 0) {
@@ -86,7 +86,7 @@ export class ImpresionComponent implements OnInit {
     this.ColorButton = "purple";
     return this.idProductoSeleccionado === 1;
   }
-  obtenerBlobFromBase64(b64Data: string, contentType: string) {
+  async obtenerBlobFromBase64(b64Data: string, contentType: string) {
     const byteCharacters = atob(b64Data);
     const byteArrays = [];
     for (let offset = 0; offset < byteCharacters.length; offset += 512) {
@@ -101,20 +101,30 @@ export class ImpresionComponent implements OnInit {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
-  onExportar() {}
+  onExportar() { }
   PrintDocument() {
     const json: any = {};
     json.cuponera = this.cabPrint.nroCupon;
     json.cuponInicial = this.cabPrint.cuponInicial;
     json.cuponFinal = this.cabPrint.cuponFinal;
     json.copias = this.cabPrint.copias;
+    json.flgCronograma = this.cabPrint.chkcronograma;
     this.service.printCupon(json).subscribe(
-      (s) => {
+      async (s) => {
         console.log(s);
         if (s.p_NCODE == 0) {
-          var file = this.obtenerBlobFromBase64(s.data, "application/pdf");
+          var file = await this.obtenerBlobFromBase64(s.data, "application/pdf");
           const urlfile = URL.createObjectURL(file);
           window.open(urlfile, "_blank");
+
+          if (this.cabPrint.chkcronograma) {
+            if (s.data2 != null && s.data2 != "") {
+              let cronograma = await this.obtenerBlobFromBase64(s.data2, "application/pdf");
+              const urlCronoFile = URL.createObjectURL(cronograma);
+              window.open(urlCronoFile, "_blank");
+            }
+          }
+
         }
       },
       (e) => {
@@ -129,17 +139,17 @@ export class ImpresionComponent implements OnInit {
   protected handleErrorPromise(error: any): Promise<void> {
     try {
       error = JSON.parse(error._body);
-    } catch (e) {}
+    } catch (e) { }
 
     const errMsg = error.errorMessage
       ? error.errorMessage
       : error.message
-      ? error.message
-      : error._body
-      ? error._body
-      : error.status
-      ? `${error.status} - ${error.statusText}`
-      : "unknown server error";
+        ? error.message
+        : error._body
+          ? error._body
+          : error.status
+            ? `${error.status} - ${error.statusText}`
+            : "unknown server error";
 
     console.error(errMsg);
     return Promise.reject(errMsg);
