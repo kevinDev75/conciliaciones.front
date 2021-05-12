@@ -33,7 +33,7 @@
     "angular-datatables": "^6.0.0",
     "angular-sortablejs": "^2.0.6",
     "angular-tree-component": "6.1.0",
-    "chart.js": "2.6.0",
+    "chart.js": "2.9.4",
     "core-js": "^2.5.5",
     "d3": "^4.9.1",
     "dragula": "3.7.2",
