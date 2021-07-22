@@ -62,7 +62,7 @@
     "simple-line-icons": "^2.4.1",
     "sortablejs": "^1.6.0",
     "tether": "^1.4.0",
-    "xlsx": "^0.13.0",
+    "xlsx": "^0.17.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
